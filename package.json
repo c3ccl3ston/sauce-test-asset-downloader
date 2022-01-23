@@ -2,10 +2,23 @@
   "name": "sauce-test-asset-download",
   "version": "0.1.0",
   "private": true,
+  "main": "public/main.js",
+  "homepage": "./",
   "dependencies": {
+    "@electron/remote": "^2.0.1",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.3.0",
+    "@mui/lab": "^5.0.0-alpha.65",
+    "@mui/material": "^5.3.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.25.0",
+    "date-fns": "^2.28.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "jquery": "^3.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -15,7 +28,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron-forge start",
+    "package": "react-scripts build && electron-forge package",
+    "make": "react-scripts build && electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +51,46 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "concurrently": "^7.0.0",
+    "electron": "^16.0.7",
+    "electron-devtools-installer": "^3.2.0",
+    "wait-on": "^6.0.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "src/icons/mac/icon.icns",
+        "name": "Sauce Labs Test Asset Downloader"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "sauce_test_asset_download"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }
